@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# OpenGL
+inc/GL/*
+inc/GLFW/*
+inc/glm/*
+lib/*
