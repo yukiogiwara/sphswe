@@ -2,12 +2,15 @@
 #pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "glfw3dll.lib")
 
-#include<GL/glew.h>
-#include<GLFW/glfw3.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-#include<iostream>
+#include <iostream>
+#include <memory>
 
 #include "scene.hpp"
+
+std::unique_ptr<Scene> scene;
 
 // Callback functions
 void glfwErrorCallBack(int error, const char* description) {
@@ -29,9 +32,26 @@ void glfwKeyCallBack(GLFWwindow* window, int key, int scancode, int action, int 
             case GLFW_KEY_Q:
                 glfwSetWindowShouldClose(window, GL_TRUE);
                 break;
-
             default:
                 break;    
+        }
+    }
+    if(action == GLFW_REPEAT) {
+        switch(key) {
+            case GLFW_KEY_W:
+                scene->MoveCamera(CameraMovement::UP);
+                break;
+            case GLFW_KEY_S:
+                scene->MoveCamera(CameraMovement::DOWN);
+                break;
+            case GLFW_KEY_A:
+                scene->MoveCamera(CameraMovement::LEFT);
+                break;
+            case GLFW_KEY_D:
+                scene->MoveCamera(CameraMovement::RIGHT);
+                break;
+            default:
+                break;
         }
     }
 }
@@ -86,10 +106,13 @@ int main(int argc, char* argv[]) {
     glEnable(GL_DEPTH_TEST);
 
     // Enable face culling
-    glEnable(GL_CULL_FACE);
+    // glEnable(GL_CULL_FACE);
 
     // Background color
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+    // Create a scene
+    scene = std::make_unique<Scene>();
 
     // Set timer
     float current_time = 0.0f, last_time = 0.0f, elapsed_time = 0.0f;
@@ -98,6 +121,8 @@ int main(int argc, char* argv[]) {
     // Main loop
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        scene->Display();
 
         // Timer
         current_time = glfwGetTime();
