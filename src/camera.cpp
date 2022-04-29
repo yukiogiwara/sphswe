@@ -20,6 +20,14 @@ void Camera::SetPosition(glm::vec3 position) {
     Update();
 }
 
+void Camera::SetFov(float fov) {
+    fov_ = fov;
+}
+
+void Camera::SetAspectRatio(float aspect_ratio) {
+    aspect_ratio_ = aspect_ratio;
+}
+
 void Camera::Update() {
     front_ = glm::normalize(target_ - position_);
     right_ = glm::normalize(glm::cross(front_, world_up_));
