@@ -36,6 +36,7 @@ void glfwKeyCallBack(GLFWwindow* window, int key, int scancode, int action, int 
                 break;    
         }
     }
+    // TODO: Move camera by mouse
     if(action == GLFW_REPEAT) {
         switch(key) {
             case GLFW_KEY_W:
@@ -106,7 +107,7 @@ int main(int argc, char* argv[]) {
     glEnable(GL_DEPTH_TEST);
 
     // Enable face culling
-    // glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     // Background color
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -127,7 +128,10 @@ int main(int argc, char* argv[]) {
         // Timer
         current_time = glfwGetTime();
         elapsed_time = current_time - last_time;
-        last_time = current_time;
+        if(elapsed_time >= scene->GetDeltaTime()) {
+            scene->Update();
+            last_time = current_time;
+        }
 
         glfwPollEvents();
         glfwSwapBuffers(window);
