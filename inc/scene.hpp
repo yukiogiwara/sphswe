@@ -10,6 +10,7 @@
 
 #include "camera.hpp"
 #include "shader.hpp"
+#include "simulator.hpp"
 
 enum CameraMovement {
     UP,
@@ -20,20 +21,23 @@ enum CameraMovement {
 
 class Scene {
 public:
-    Scene();
+    Scene(int window_width, int window_height);
     ~Scene();
 
     // Draw scene
     void Display();
 
+    // Update scene
+    void Update();
+
     // Control camera
     void MoveCamera(CameraMovement movement);
 
+    float GetDeltaTime();
+
 private:
-    // tmp test
-    GLuint vao_;
-    GLuint vbo_;
-    GLuint ibo_;
+    void Load(int window_width, int window_height);
+    void UpdateVAO();
 
     // Camera
     std::unique_ptr<Camera> camera_;
@@ -41,6 +45,19 @@ private:
     float theta_;
     float phi_;
 
+    // Light
+    glm::vec3 light_pos_;
+    glm::vec3 light_color_;
+
     // Shader 
-    std::unique_ptr<Shader> shader_;
+    std::unique_ptr<Shader> particle_shader_;
+
+    // Simulator
+    std::unique_ptr<SPHSWE> simulator_;
+
+    // VAO
+    GLuint particle_vao_;
+
+    // VBO
+    GLuint particle_vbo_;
 };
