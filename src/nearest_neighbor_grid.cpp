@@ -78,7 +78,7 @@ void NearestNeighborGrid::Register(void* particles, unsigned int num_particles, 
     }
 }
 
-void NearestNeighborGrid::Search(glm::vec3 pos, void* particles, int stride, std::vector<int> neighbors, float effective_radius) {
+void NearestNeighborGrid::Search(glm::vec3 pos, void* particles, int stride, std::vector<int> &neighbors, float effective_radius) {
     glm::uvec3 indices = CalcIndices(pos);
 
     int range = (int)(effective_radius/cell_width_[0]) + 1;

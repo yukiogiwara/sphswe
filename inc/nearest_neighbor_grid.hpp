@@ -12,7 +12,7 @@ class NearestNeighborGrid {
 public:
     NearestNeighborGrid(glm::vec3 min_cord, glm::vec3 max_cord, float effective_radius, int num_particles);
     void Register(void* particles, unsigned int num_particles, int stride);
-    void Search(glm::vec3 pos, void* particles, int stride, std::vector<int> neighbors, float effective_radius);
+    void Search(glm::vec3 pos, void* particles, int stride, std::vector<int> &neighbors, float effective_radius);
 
 private:
     glm::uvec3 CalcIndices(glm::vec3 pos);
