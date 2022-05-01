@@ -74,8 +74,8 @@ void Scene::MoveCamera(CameraMovement movement) {
 // TODO: load from configuration file
 void Scene::LoadConfiguration(int window_width, int window_height) {
     // Camera
-    distance_ = 3.0f;
-    theta_ = 0.0f;
+    distance_ = 6.0f;
+    theta_ = 30.0f;
     phi_ = -90.0f;
     float theta_rad = glm::radians(theta_);
     float phi_rad = glm::radians(phi_);
@@ -103,17 +103,19 @@ void Scene::LoadConfiguration(int window_width, int window_height) {
 
 void Scene::GenerateBuffers() {
     // Must be deleted in destructor
-    Particle* data = simulator_->GetData();
+
+    // Particles 
     glGenVertexArrays(1, &particle_vao_);
     glGenBuffers(1, &particle_vbo_);
     glBindVertexArray(particle_vao_);
     glBindBuffer(GL_ARRAY_BUFFER, particle_vbo_);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Particle)*simulator_->GetNumParticles(), data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Particle)*simulator_->GetNumParticles(), simulator_->GetData(), GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)0);
     glEnableVertexAttribArray(0);
 }
 
 void Scene::UpdateBuffers() {
-    // glBindBuffer(GL_ARRAY_BUFFER, particle_vbo_);
-    // glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Particle)*simulator_->GetNumParticles(), simulator_->GetData());
+    // Particles
+    glBindBuffer(GL_ARRAY_BUFFER, particle_vbo_);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Particle)*simulator_->GetNumParticles(), simulator_->GetData());
 }
