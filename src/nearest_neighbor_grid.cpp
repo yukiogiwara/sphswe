@@ -120,6 +120,7 @@ glm::uvec3 NearestNeighborGrid::CalcIndices(glm::vec3 pos) {
     pos -= origin_;
     glm::uvec3 indices = glm::uvec3(pos / cell_width_);
     glm::clamp(indices, glm::uvec3(0), num_cells_-1u);
+    return indices;
 }
 
 unsigned int NearestNeighborGrid::CalcHash(glm::uvec3 indices) {

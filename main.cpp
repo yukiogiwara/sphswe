@@ -10,6 +10,15 @@
 
 #include "scene.hpp"
 
+const int kOpenGLVersionMejor = 3;
+const int kOpenGLVersionMinor = 3;
+
+int window_width = 800;
+int window_height = 600;
+
+const glm::vec4 kBackgroundColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+const float kPointSize = 8.0f;
+
 std::unique_ptr<Scene> scene;
 
 // Callback functions
@@ -58,20 +67,23 @@ void glfwKeyCallBack(GLFWwindow* window, int key, int scancode, int action, int 
 }
 
 void glfwFramebufferSizeCallBack(GLFWwindow* window, int width, int height) {
+    window_width = width;
+    window_height = height;
+    // TODO: set aspect ratio to camera
     glViewport(0, 0, width, height);
 }
 
 int main(int argc, char* argv[]) {
     // Initialize GLFW
-    if(!glfwInit()) return 1;
+    if(!glfwInit()) exit(1);
     glfwSetErrorCallback(glfwErrorCallBack);
 
     // Set function to be executed on exit
     atexit(glfwTerminate);
 
     // Configure GLFW
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, kOpenGLVersionMejor);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, kOpenGLVersionMinor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -79,7 +91,7 @@ int main(int argc, char* argv[]) {
 #endif
 
     // Create a window
-    GLFWwindow *window = glfwCreateWindow(800, 600, "SPH Based Shallow Water Simulation", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(window_width, window_height, "SPH Based Shallow Water Simulation", NULL, NULL);
     if(window == NULL) {
         std::cerr << "Falied to create GLFW window" << std::endl;
         exit(1);
@@ -100,20 +112,17 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
-    // Disable V-Sync
+    // Settings
     glfwSwapInterval(0);
-
-    // Enable depth buffer
     glEnable(GL_DEPTH_TEST);
-
-    // Enable face culling
     glEnable(GL_CULL_FACE);
+    glEnable(GL_POINT_SMOOTH);
 
-    // Background color
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(kBackgroundColor.r, kBackgroundColor.g, kBackgroundColor.b, kBackgroundColor.a);
+    glPointSize(kPointSize);
 
     // Create a scene
-    scene = std::make_unique<Scene>();
+    scene = std::make_unique<Scene>(window_width, window_height);
 
     // Set timer
     float current_time = 0.0f, last_time = 0.0f, elapsed_time = 0.0f;

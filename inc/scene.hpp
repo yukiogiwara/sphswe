@@ -24,20 +24,20 @@ public:
     Scene(int window_width, int window_height);
     ~Scene();
 
-    // Draw scene
+    // getter
+    float GetDeltaTime() const;
+
+    // setter
+    void SetAspectRatio(int window_width, int window_height);
+
     void Display();
-
-    // Update scene
     void Update();
-
-    // Control camera
     void MoveCamera(CameraMovement movement);
 
-    float GetDeltaTime();
-
 private:
-    void Load(int window_width, int window_height);
-    void UpdateVAO();
+    void LoadConfiguration(int window_width, int window_height);
+    void GenerateBuffers();
+    void UpdateBuffers();
 
     // Camera
     std::unique_ptr<Camera> camera_;
@@ -55,9 +55,7 @@ private:
     // Simulator
     std::unique_ptr<SPHSWE> simulator_;
 
-    // VAO
+    // Buffers
     GLuint particle_vao_;
-
-    // VBO
     GLuint particle_vbo_;
 };
